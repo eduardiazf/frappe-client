@@ -14,8 +14,8 @@ class FrappeException(Exception):
 class NotUploadableException(FrappeException):
 
     def __init__(self, doctype):
-        self.message = "The doctype `{1}` is not uploadable, so you can't download the template".format(
-            doctype)
+        self.message = """The doctype `{1}` is not uploadable,
+        so you can't download the template""".format(doctype)
 
 CAN_DOWNLOAD = []
 
@@ -55,7 +55,8 @@ class FrappeClient(object):
         CAN_DOWNLOAD = []
 
     def insert(self, doc):
-        res = self.session.post(self.url + "/api/resource/" + doc.get("doctype"),
+        res = self.session.post(self.url + "/api/resource/" +
+                                doc.get("doctype"),
                                 data={"data": json.dumps(doc)})
         return self.post_process(res)
 
@@ -115,8 +116,8 @@ class FrappeClient(object):
         if fields:
             params["fields"] = json.dumps(fields)
 
-        res = self.session.get(self.url + "/api/resource/" + doctype + "/" + name,
-                               params=params)
+        res = self.session.get(self.url + "/api/resource/" + doctype + "/" +
+                               name, params=params)
 
         return self.post_process(res)
 
@@ -142,7 +143,9 @@ class FrappeClient(object):
 
         return self.post_process_file_stream(response)
 
-    def get_html(self, doctype, name, print_format="Standard", letterhead=True):
+    def get_html(self, doctype, name,
+                 print_format="Standard",
+                 letterhead=True):
         params = {
             'doctype': doctype,
             'name': name,
@@ -211,7 +214,7 @@ class FrappeClient(object):
         try:
             rjson = response.json()
         except ValueError:
-            print response.text
+            print(response.text)
             raise
 
         if rjson and ("exc" in rjson) and rjson["exc"]:
@@ -234,7 +237,7 @@ class FrappeClient(object):
             try:
                 rjson = response.json()
             except ValueError:
-                print response.text
+                print(response.text)
                 raise
 
             if rjson and ("exc" in rjson) and rjson["exc"]:
